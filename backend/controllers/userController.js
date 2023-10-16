@@ -61,12 +61,10 @@ const loginUser=asyncHandler(async(req,res)=>{
 //private
 const getMe=asyncHandler(async(req,res)=>{
     
-    const {_id,userName,email}=await User.findById(req.user.id)
-    res.status(200).json({
-        id:_id,
-        userName,
-        email,
-    })
+   
+    res.status(200).json(
+        req.user
+    )
 })
 
 //genete JWT
