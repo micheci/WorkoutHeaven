@@ -22,6 +22,31 @@ module.exports = {
       console.log(err);
     }
   },
+  getPosts: async (req, res) => {
+    try {
+        console.log('hi')
+        const posts = await Post.find();
+        if (!posts) {
+          return res.status(404).json({ error: 'No posts found' });
+        }
+    
+        res.status(200).json(posts); // Send the retrieved posts as a JSON response
+    //     console.log(req.body)
+    //   // Upload image to cloudinary
+    //   const result = await cloudinary.uploader.upload(req.file.path);
+
+    //   const post= await Post.create({
+    //     body: req.body.body,
+    //     ImageURL: result.secure_url,
+    //     cloudinaryId: result.public_id,
+    //     user: req.user.id,
+    //   });
+    //   console.log("Post has been added!");
+    //   res.status(200).json(post)
+     } catch (err) {
+       console.log(err);
+     }
+  },
  
 
 };
