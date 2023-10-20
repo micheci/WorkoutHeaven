@@ -1,5 +1,6 @@
 const cloudinary = require("../middleware/cloudinary")
 const Post = require("../models/PostModel");
+const Profile=require('../models/ProfileModel')
 
 module.exports = {
  
@@ -47,6 +48,49 @@ module.exports = {
        console.log(err);
      }
   },
+  editShortBio: async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const newShortBio = req.body.shortBio;
+  
+      // Attempt to find the profile for the user
+      let updatedProfile = await Profile.findOne({ user: userId });
+  
+      if (!updatedProfile) {
+        // If no profile exists, create a new one
+        updatedProfile = new Profile({
+          user: userId,
+          shortBio: newShortBio,
+          // Add other profile properties here
+        });
+  
+        await updatedProfile.save();
+      } else {
+        // Update the shortBio field if the profile exists
+        updatedProfile.shortBio = newShortBio;
+        await updatedProfile.save();
+      }
+  
+      res.status(200).json(updatedProfile);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Server error' });
+    }},
+
+    getShortBio: async (req, res) => {
+      try {
+          console.log('hi')
+          const profile = await Profile.findOne({ user: req.user.id }); // Assuming the user's ID is stored in the 'user' field
+          if (!profile) {
+            return res.status(404).json({ error: 'No profile found' });
+          }
+      
+          res.status(200).json(profile); // Send the retrieved posts as a JSON response
+      
+       } catch (err) {
+         console.log(err);
+       }
+    },
  
 
 };
